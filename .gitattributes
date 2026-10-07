@@ -1,0 +1,3 @@
+# Keep LF endings for scripts and templates regardless of OS or sync client
+* text=auto eol=lf
+*.zip binary

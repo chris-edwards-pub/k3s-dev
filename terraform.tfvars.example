@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars (gitignored) and fill in. Only state_bucket is required.
+
+# Terraform state bucket (create it with scripts/bootstrap-state-bucket.sh)
+state_bucket = "tfstate-<account-id>-us-east-1"
+# state_region = "us-east-1"
+
+# Nightly auto-stop
+# auto_stop_enabled  = true
+# auto_stop_schedule = "cron(0 3 * * ? *)"
+# auto_stop_timezone = "America/New_York" # IANA name; default UTC
+
+# Cluster
+# instance_type       = "t3.medium"
+# use_spot            = false
+# agent_count         = 2
+# admin_cidr          = "203.0.113.10/32" # default: your current public IP
+# ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+# k3s_version         = "v1.36.5+k3s1"

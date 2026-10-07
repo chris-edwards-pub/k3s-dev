@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+exec > >(tee /var/log/k3s-bootstrap.log) 2>&1
+
+# OS prep (AlmaLinux 9): SSM agent, SELinux policy deps, no host firewall / nm-cloud-setup
+dnf install -y "https://s3.${region}.amazonaws.com/amazon-ssm-${region}/latest/linux_amd64/amazon-ssm-agent.rpm"
+systemctl enable --now amazon-ssm-agent
+dnf install -y container-selinux
+systemctl disable --now nm-cloud-setup.service nm-cloud-setup.timer 2>/dev/null || true
+systemctl disable --now firewalld 2>/dev/null || true
+
+IMDS_TOKEN=$(curl -sX PUT http://169.254.169.254/latest/api/token -H "X-aws-ec2-metadata-token-ttl-seconds: 300")
+PRIVATE_IP=$(curl -s -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4)
+
+until curl -sk "https://${server_ip}:6443/ping" >/dev/null; do sleep 5; done
+
+curl -sfL https://get.k3s.io | \
+  INSTALL_K3S_VERSION="${k3s_version}" K3S_TOKEN="${k3s_token}" \
+  K3S_URL="https://${server_ip}:6443" \
+  sh -s - agent --node-ip "$PRIVATE_IP"

@@ -1,0 +1,35 @@
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+# .terraform.lock.hcl is intentionally committed (pins provider versions)
+
+# --- Variables (may contain personal IPs/paths) ---
+*.tfvars
+*.tfvars.json
+!terraform.tfvars.example
+
+# --- Secrets / generated artifacts ---
+kubeconfig
+kubeconfig.*
+*.pem
+.build/
+__pycache__/
+*.pyc
+
+# --- Local tooling / OS / editors ---
+.claude/settings.local.json
+.DS_Store
+.vscode/
+.idea/
+*.swp
